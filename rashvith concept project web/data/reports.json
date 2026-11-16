@@ -1,0 +1,24 @@
+[
+  {
+    "id": "bf82c3eb-7ccf-4fbf-8af0-28a30cf7ee69",
+    "trackingCode": "FM-3D26B5192BFB",
+    "title": "lightn",
+    "details": "hi fix the",
+    "area": "Koramangala",
+    "type": "Street",
+    "lat": 12.937332,
+    "lng": 77.621138,
+    "status": "open",
+    "createdAt": "2026-11-16T16:07:03.391Z",
+    "statusHistory": [
+      {
+        "status": "open",
+        "note": "Your report was received by the FixMaduva community tracker. It has not been sent to a government office.",
+        "createdAt": "2026-11-16T16:07:03.391Z"
+      }
+    ],
+    "voterIds": [
+      "0db1f798-9895-43a9-982c-5365adb801ec"
+    ]
+  }
+]

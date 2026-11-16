@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="FixMaduva helps Bengaluru neighbours report local issues, follow community support, and take action together."
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <title>FixMaduva — Better streets, together</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="FixMaduva home">
+        <img src="/assets/fixmaduva-logo.jpg" alt="FixMaduva Bengaluru — Report, Track, Get It Fixed" />
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#map">Explore</a>
+        <a class="nav-link" href="#track">Track report</a>
+        <a class="nav-link" href="#community">Community</a>
+        <a class="nav-link" href="#impact">Our impact</a>
+      </nav>
+      <div class="top-actions">
+        <button class="language-button" type="button" aria-label="Change language">ಕನ್ನಡ <span>⌄</span></button>
+        <button class="profile-button" type="button" id="joinButton">Join community <span aria-hidden="true">↗</span></button>
+        <button class="menu-button" id="menuButton" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <div class="eyebrow"><span class="live-dot"></span> A better Bengaluru starts nearby</div>
+          <h1 id="page-title">Your street.<br /><span>Your say.</span> Your city.</h1>
+          <p>Spot something that needs fixing? Pin it on the map, share it with neighbours, and see which local issues the community is backing.</p>
+          <div class="intro-actions">
+            <button class="button button-primary" id="reportButton" type="button"><span>＋</span> Report an issue</button>
+            <a class="text-link" href="#how-it-works">See how it works <span>↘</span></a>
+          </div>
+        </div>
+        <div class="impact-strip" id="impact">
+          <div><strong id="reportCount">0</strong><span>community reports</span></div>
+          <div><strong id="areaCount">0</strong><span>areas represented</span></div>
+          <div><strong id="supportCount">0</strong><span>neighbour supports</span></div>
+          <div class="impact-note"><span class="sparkle">✳</span> Every report<br />starts nearby.</div>
+        </div>
+      </section>
+
+      <section class="track-lookup" id="track" aria-labelledby="track-heading">
+        <div>
+          <div class="section-kicker">ALREADY REPORTED SOMETHING?</div>
+          <h2 id="track-heading">Follow your report.</h2>
+          <p>Enter its FixMaduva reference to see the latest status and location details.</p>
+        </div>
+        <form id="trackingForm" class="tracking-form">
+          <label class="sr-only" for="trackingCodeInput">Report tracking reference</label>
+          <input id="trackingCodeInput" class="form-input" placeholder="e.g. FM-A1B2C3D4E5F6" autocomplete="off" required />
+          <button type="submit" class="button button-primary">Track report <span>→</span></button>
+        </form>
+      </section>
+
+      <section class="workspace" id="map" aria-label="Explore neighbourhood issues">
+        <div class="map-panel">
+          <div class="map-toolbar">
+            <label class="search-box">
+              <span aria-hidden="true">⌕</span>
+              <input id="searchInput" type="search" placeholder="Search a neighbourhood or issue" aria-label="Search a neighbourhood or issue" />
+              <kbd>⌘ K</kbd>
+            </label>
+            <button class="icon-button locate-button" id="locateButton" type="button" aria-label="Show my location">◎</button>
+            <button class="map-style-button" id="mapStyleButton" type="button">Reset map <span>↺</span></button>
+          </div>
+          <div class="map-art" id="mapArt" aria-label="OpenStreetMap of Bengaluru showing community reports">
+            <div id="liveMap"></div>
+            <div class="map-caption"><span class="caption-dot"></span> Community reports <span>·</span> Bengaluru</div>
+          </div>
+          <div class="map-legend"><span><i class="legend-dot urgent"></i> Open report</span><span><i class="legend-dot progress"></i> Backed by neighbours</span></div>
+        </div>
+
+        <aside class="issue-panel" aria-label="Neighbourhood activity">
+          <div class="panel-heading">
+            <div><div class="section-kicker">AROUND YOU <span>·</span> BENGALURU</div><h2>Neighbourhood pulse</h2></div>
+            <button class="more-button" type="button" id="filtersButton" aria-label="Search reports">☷</button>
+          </div>
+          <div class="panel-tabs" role="tablist" aria-label="Issue status">
+            <button class="panel-tab selected" type="button" data-filter="all" role="tab" aria-selected="true">All <span id="allCount">0</span></button>
+            <button class="panel-tab" type="button" data-filter="unsupported" role="tab" aria-selected="false">Needs support</button>
+            <button class="panel-tab" type="button" data-filter="supported" role="tab" aria-selected="false">Backed</button>
+          </div>
+          <div class="issue-list" id="issueList" aria-live="polite"></div>
+          <button class="button button-outline view-all-button" id="viewAllButton" type="button">Clear search &amp; filters <span>→</span></button>
+          <div class="neighbourhood-card" id="community">
+            <div class="community-icon">✳</div>
+            <div><strong>Small actions add up.</strong><p>Back a local report to show neighbours it matters.</p></div>
+            <button type="button" aria-label="Learn how to join the community" id="communityJoin">↗</button>
+          </div>
+        </aside>
+      </section>
+
+      <section class="how-section" id="how-it-works">
+        <div class="how-heading"><div class="section-kicker">FROM SPOTTED TO SUPPORTED</div><h2>Not another complaint box.</h2><p>A simple loop that turns local knowledge into visible community action.</p></div>
+        <div class="steps">
+          <article class="step"><span class="step-number">01</span><div class="step-icon">↗</div><h3>Spot it</h3><p>Pin the problem and add a short description so neighbours can find it.</p></article>
+          <article class="step"><span class="step-number">02</span><div class="step-icon">◎</div><h3>Back each other</h3><p>Back reports you recognize and help your community see what matters nearby.</p></article>
+          <article class="step"><span class="step-number">03</span><div class="step-icon">✳</div><h3>See the pulse</h3><p>Explore open community reports by area, issue type, and neighbour support.</p></article>
+          <article class="step callout-step"><div class="step-icon">♡</div><h3>Small actions add up.</h3><p>Good streets are made by the people who live on them.</p><button class="text-link" id="howReportButton" type="button">Start with your street →</button></article>
+        </div>
+      </section>
+    </main>
+
+    <footer><a class="brand footer-brand" href="#" aria-label="FixMaduva home"><img src="/assets/fixmaduva-logo.jpg" alt="FixMaduva Bengaluru" /></a><span>Built for neighbours, by neighbours. Bengaluru, Karnataka.</span><div><a href="#how-it-works">About</a><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">Map data: OpenStreetMap</a></div></footer>
+
+    <dialog class="report-dialog" id="reportDialog">
+      <form method="dialog" class="dialog-close-form"><button class="dialog-close" aria-label="Close report form">×</button></form>
+      <div class="dialog-kicker">MAKE YOUR NEIGHBOURHOOD BETTER</div>
+      <h2>What needs fixing?</h2>
+      <p class="dialog-intro">Share a local issue with neighbours. Reports are community submitted, not official city records.</p>
+      <form id="reportForm">
+        <label class="field-label" for="issueTitle">Give it a short title</label>
+        <input class="form-input" id="issueTitle" name="title" placeholder="e.g. Overflowing bin on 12th Main" required maxlength="100" />
+        <div class="form-row">
+          <div><label class="field-label" for="issueArea">Neighbourhood</label><select class="form-input" id="issueArea" name="area"><option>Indiranagar</option><option>Jayanagar</option><option>Koramangala</option><option>MG Road</option><option>Domlur</option><option>Whitefield</option><option>HSR Layout</option><option>Malleshwaram</option><option>Rajajinagar</option><option>Basavanagudi</option><option>Other Bengaluru</option></select></div>
+          <div><label class="field-label" for="issueType">Issue type</label><select class="form-input" id="issueType" name="type"><option value="Waste">Waste & cleanliness</option><option value="Road">Road & footpath</option><option value="Water">Water & drainage</option><option value="Street">Street lights</option><option value="Other">Something else</option></select></div>
+        </div>
+        <label class="field-label" for="issueDetails">What’s happening? <span class="optional">(optional)</span></label>
+        <textarea class="form-input details-input" id="issueDetails" name="details" placeholder="Add a little context for your neighbours..." maxlength="500"></textarea>
+        <div class="photo-upload">
+          <label class="field-label" for="issuePhoto">Add a photo <span class="optional">(optional)</span></label>
+          <label class="photo-picker" for="issuePhoto"><span aria-hidden="true">＋</span> Choose a photo <small>JPG, PNG, or WebP · up to 10 MB</small></label>
+          <input class="sr-only" type="file" id="issuePhoto" name="photo" accept="image/jpeg,image/png,image/webp" />
+          <div class="photo-preview" id="photoPreview" hidden>
+            <img id="photoPreviewImage" alt="Preview of the report photo" />
+            <button type="button" class="photo-remove" id="removePhotoButton">Remove photo</button>
+          </div>
+        </div>
+        <div class="location-picker">
+          <div><strong>Pin the location</strong><span id="locationStatus">Required · choose a point on the map</span></div>
+          <button type="button" class="button button-outline" id="pickLocationButton">Choose on map</button>
+        </div>
+        <input type="hidden" name="lat" id="issueLat" />
+        <input type="hidden" name="lng" id="issueLng" />
+        <button class="button button-primary submit-report" type="submit">Post to the neighbourhood <span>→</span></button>
+        <p class="form-note">Your report is public. Don’t include personal or sensitive information.</p>
+      </form>
+    </dialog>
+    <dialog class="report-dialog tracking-dialog" id="trackingDialog" aria-labelledby="trackingTitle">
+      <form method="dialog" class="dialog-close-form"><button class="dialog-close" aria-label="Close report tracking">×</button></form>
+      <div id="trackingDetail"></div>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script defer src="/app.js"></script>
+  </body>
+</html>

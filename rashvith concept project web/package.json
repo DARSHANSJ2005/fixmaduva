@@ -1,0 +1,14 @@
+{
+  "name": "fixmaduva",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Bengaluru neighbourhood issue reporting app",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  }
+}
